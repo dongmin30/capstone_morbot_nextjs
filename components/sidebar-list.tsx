@@ -25,7 +25,7 @@ export async function SidebarList({ userId }: SidebarListProps) {
           </div>
         ) : (
           <div className="p-8 text-center">
-            <p className="text-sm text-muted-foreground">No chat history</p>
+            <p className="text-sm text-muted-foreground">채팅 기록이 없습니다.</p>
           </div>
         )}
       </div>

@@ -37,7 +37,7 @@ export function ClearHistory({
       <AlertDialogTrigger asChild>
         <Button variant="ghost" disabled={!isEnabled || isPending}>
           {isPending && <IconSpinner className="mr-2" />}
-          Clear history
+          채팅 기록 초기화
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

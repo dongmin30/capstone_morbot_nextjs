@@ -24,7 +24,7 @@ export function EmptyScreen() {
     <div className="mx-auto max-w-2xl px-4">
       <div className="flex flex-col gap-2 rounded-lg border bg-background p-8">
         <h1 className="text-lg font-semibold">
-          AI 챗봇 모르봇 오신걸 환영합니다!
+          AI 챗봇 모르봇에 오신걸 환영합니다!
         </h1>
         <p className="leading-normal text-muted-foreground">
           모르봇은 채팅 기능을 제공하며, 
