@@ -74,16 +74,16 @@ export enum ResultCode {
 export const getMessageFromCode = (resultCode: string) => {
   switch (resultCode) {
     case ResultCode.InvalidCredentials:
-      return 'Invalid credentials!'
+      return '인증실패 아이디, 비밀번호를 다시 확인해주세요.'
     case ResultCode.InvalidSubmission:
-      return 'Invalid submission, please try again!'
+      return '로그인에 실패하였습니다 다시 시도해 주세요.'
     case ResultCode.UserAlreadyExists:
-      return 'User already exists, please log in!'
+      return '이미 존재하는 사용자입니다. 로그인 해주세요.'
     case ResultCode.UserCreated:
-      return 'User created, welcome!'
+      return '사용자가 생성되었습니다. 환영합니다.'
     case ResultCode.UnknownError:
-      return 'Something went wrong, please try again!'
+      return '문제가 발생하였습니다. 다시 시도해주세요.'
     case ResultCode.UserLoggedIn:
-      return 'Logged in!'
+      return '로그인 되었습니다.'
   }
 }

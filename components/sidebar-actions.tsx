@@ -81,15 +81,14 @@ export function SidebarActions({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>정말로 삭제하시겠습니까?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete your chat message and remove your
-              data from our servers.
+            채팅 기록과 데이터가 서버에서 영구적으로 삭제됩니다.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isRemovePending}>
-              Cancel
+              취소
             </AlertDialogCancel>
             <AlertDialogAction
               disabled={isRemovePending}
@@ -115,7 +114,7 @@ export function SidebarActions({
               }}
             >
               {isRemovePending && <IconSpinner className="mr-2 animate-spin" />}
-              Delete
+              삭제
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

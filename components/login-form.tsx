@@ -19,7 +19,9 @@ export default function LoginForm() {
         toast.error(getMessageFromCode(result.resultCode))
       } else {
         toast.success(getMessageFromCode(result.resultCode))
-        router.refresh()
+        // 로그인 성공 시 루트 경로('/')로 이동합니다.
+        router.push('/'); // push 메서드를 사용하여 루트 경로('/')로 이동합니다.
+        router.refresh();
       }
     }
   }, [result, router])
