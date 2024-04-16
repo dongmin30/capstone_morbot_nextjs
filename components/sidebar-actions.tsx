@@ -109,7 +109,7 @@ export function SidebarActions({
                   setDeleteDialogOpen(false)
                   router.refresh()
                   router.push('/')
-                  toast.success('Chat deleted')
+                  toast.success('채팅이 삭제되었습니다.')
                 })
               }}
             >

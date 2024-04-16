@@ -16,7 +16,7 @@ export const metadata = {
     default: 'AI 챗봇 모르봇',
     template: `%s - 모르봇`
   },
-  description: 'An AI-powered chatbot template built with Next.js and Vercel.',
+  description: '산업 안전 관리 AI 챗봇 모르봇입니다.',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',

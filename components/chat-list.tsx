@@ -25,15 +25,15 @@ export function ChatList({ messages, session, isShared }: ChatList) {
             </div>
             <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
               <p className="text-muted-foreground leading-normal">
-                Please{' '}
+                채팅 기록을 저장하고 다시 확인하려면{' '}
                 <Link href="/login" className="underline">
-                  log in
-                </Link>{' '}
-                or{' '}
+                  로그인
+                </Link>
+                {' '}하거나{' '}
                 <Link href="/signup" className="underline">
-                  sign up
-                </Link>{' '}
-                to save and revisit your chat history!
+                  회원가입
+                </Link>
+                을 진행하세요!
               </p>
             </div>
           </div>
