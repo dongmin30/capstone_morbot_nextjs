@@ -13,7 +13,8 @@ import {
 import { UserMenu } from '@/components/user-menu'
 import { SidebarMobile } from './sidebar-mobile'
 import { SidebarToggle } from './sidebar-toggle'
-import { ChatHistory } from './chat-history'
+import { ChatHistory } from '@/components/chat/chat-history'
+import { AssistantHistory } from '@/components/assistant/assistant-history'
 import { Session } from '@/lib/types'
 import { ThemeToggle } from '@/components/theme-toggle'
 
@@ -26,7 +27,14 @@ async function UserOrLogin() {
           <SidebarMobile>
             <ChatHistory userId={session.user.id} />
           </SidebarMobile>
-          <SidebarToggle />
+          <SidebarToggle mode={'chatMode'} />
+
+          <IconSeparator className="size-6 text-muted-foreground/50 mr-2" />
+
+          <SidebarMobile>
+            <AssistantHistory userId={session.user.id} />
+          </SidebarMobile>
+          <SidebarToggle mode={'assistantMode'} />
         </>
       ) : (
         <Link href="/new" rel="nofollow">

@@ -6,15 +6,20 @@ import { useSidebar } from '@/lib/hooks/use-sidebar'
 import { Button } from '@/components/ui/button'
 import { IconSidebar } from '@/components/ui/icons'
 
-export function SidebarToggle() {
-  const { toggleSidebar } = useSidebar()
+interface SidebarToggleContext {
+  mode: string;
+}
+
+export function SidebarToggle({ mode }: SidebarToggleContext) {
+  const { toggleSidebar, changeMode } = useSidebar()
 
   return (
     <Button
       variant="ghost"
       className="-ml-2 hidden size-9 p-0 lg:flex"
       onClick={() => {
-        toggleSidebar()
+        toggleSidebar();
+        changeMode(mode);
       }}
     >
       <IconSidebar className="size-6" />
