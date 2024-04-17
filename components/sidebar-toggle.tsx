@@ -10,8 +10,8 @@ interface SidebarToggleContext {
   mode: string;
 }
 
-export function SidebarToggle({ mode }: SidebarToggleContext) {
-  const { toggleSidebar, changeMode } = useSidebar()
+export function SidebarToggle() {
+  const { toggleSidebar } = useSidebar()
 
   return (
     <Button
@@ -19,7 +19,6 @@ export function SidebarToggle({ mode }: SidebarToggleContext) {
       className="-ml-2 hidden size-9 p-0 lg:flex"
       onClick={() => {
         toggleSidebar();
-        changeMode(mode);
       }}
     >
       <IconSidebar className="size-6" />

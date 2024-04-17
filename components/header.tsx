@@ -27,14 +27,14 @@ async function UserOrLogin() {
           <SidebarMobile>
             <ChatHistory userId={session.user.id} />
           </SidebarMobile>
-          <SidebarToggle mode={'chatMode'} />
+          <SidebarToggle />
 
           <IconSeparator className="size-6 text-muted-foreground/50 mr-2" />
 
           <SidebarMobile>
             <AssistantHistory userId={session.user.id} />
           </SidebarMobile>
-          <SidebarToggle mode={'assistantMode'} />
+          <SidebarToggle />
         </>
       ) : (
         <Link href="/new" rel="nofollow">
