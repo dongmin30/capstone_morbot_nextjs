@@ -5,18 +5,17 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Sidebar } from '@/components/sidebar'
 import { Button } from '@/components/ui/button'
 
-import { IconSidebar } from '@/components/ui/icons'
-
 interface SidebarMobileProps {
-  children: React.ReactNode
+  children: React.ReactNode[]
+  mode: string
 }
 
-export function SidebarMobile({ children }: SidebarMobileProps) {
+export function SidebarMobile({ children, mode }: SidebarMobileProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="-ml-2 flex size-9 p-0 lg:hidden">
-          <IconSidebar className="size-6" />
+        <Button variant="ghost" className="-ml-2 flex text-sm p-0 lg:hidden">
+          {mode === 'chatMode' ? '채팅' : '어시스턴트'}
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
       </SheetTrigger>
@@ -24,7 +23,7 @@ export function SidebarMobile({ children }: SidebarMobileProps) {
         side="left"
         className="inset-y-0 flex h-auto w-[300px] flex-col p-0"
       >
-        <Sidebar className="flex">{children}</Sidebar>
+        <Sidebar className="flex" mobileYn={true}>{children}</Sidebar>
       </SheetContent>
     </Sheet>
   )

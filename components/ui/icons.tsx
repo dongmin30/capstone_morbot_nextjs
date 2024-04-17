@@ -1,6 +1,9 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
+import assistantImage from '@/public/assistant-icon.png'
+import chatImage from '@/public/chat-icon.png'
 
 import { cn } from '@/lib/utils'
 
@@ -291,6 +294,28 @@ function IconSidebar({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
+function IconChat({ className, ...props }: React.ComponentProps<'svg'>) {
+  return (
+    <Image
+      src={chatImage}
+      alt="Chat Icon"
+      width={30}
+      height={30}
+    />
+  )
+}
+
+function IconAssistant({ className, ...props }: React.ComponentProps<'svg'>) {
+  return (
+    <Image
+      src={assistantImage}
+      alt="Assistant Icon"
+      width={30}
+      height={30}
+    />
+  )
+}
+
 function IconMoon({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
     <svg
@@ -475,6 +500,8 @@ export {
   IconRefresh,
   IconStop,
   IconSidebar,
+  IconChat,
+  IconAssistant,
   IconMoon,
   IconSun,
   IconCopy,

@@ -24,17 +24,21 @@ async function UserOrLogin() {
     <>
       {session?.user ? (
         <>
-          <SidebarMobile>
+          <SidebarMobile mode={'chatMode'}>
+            {/* TODO 나중에 리팩토링 해야될 부분 */}
             <ChatHistory userId={session.user.id} />
+            <AssistantHistory userId={session.user.id} />
           </SidebarMobile>
-          <SidebarToggle />
+          <SidebarToggle mode={'chatMode'} />
 
           <IconSeparator className="size-6 text-muted-foreground/50 mr-2" />
 
-          <SidebarMobile>
+          <SidebarMobile mode={'assistantMode'} >
+            {/* TODO 나중에 리팩토링 해야될 부분 */}
             <AssistantHistory userId={session.user.id} />
+            <ChatHistory userId={session.user.id} />
           </SidebarMobile>
-          <SidebarToggle />
+          <SidebarToggle mode={'assistantMode'} />
         </>
       ) : (
         <Link href="/new" rel="nofollow">
@@ -59,7 +63,7 @@ async function UserOrLogin() {
 export function Header() {
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 border-b shrink-0 bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl">
-      <div className="flex items-center">
+      <div className="flex items-center ml-4">
         <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
           <UserOrLogin />
         </React.Suspense>

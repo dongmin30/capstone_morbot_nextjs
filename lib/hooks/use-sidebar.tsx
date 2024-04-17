@@ -6,8 +6,10 @@ const LOCAL_STORAGE_KEY = 'sidebar'
 
 interface SidebarContext {
   isSidebarOpen: boolean
-  toggleSidebar: () => void
+  toggleSidebar: (toggleMode: string) => void
   isLoading: boolean
+  mode: string
+  changeMode: (mode: string) => void
 }
 
 const SidebarContext = React.createContext<SidebarContext | undefined>(
@@ -29,6 +31,7 @@ interface SidebarProviderProps {
 export function SidebarProvider({ children }: SidebarProviderProps) {
   const [isSidebarOpen, setSidebarOpen] = React.useState(true)
   const [isLoading, setLoading] = React.useState(true)
+  const [mode, setMode] = React.useState('chatMode')
 
   React.useEffect(() => {
     const value = localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -38,12 +41,16 @@ export function SidebarProvider({ children }: SidebarProviderProps) {
     setLoading(false)
   }, [])
 
-  const toggleSidebar = () => {
-    setSidebarOpen(value => {
-      const newState = !value
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newState))
-      return newState
-    })
+  const toggleSidebar = (toggleMode: string) => {
+    const isModeMatch = toggleMode === mode;
+    const newState = isModeMatch ? !isSidebarOpen : true;
+  
+    setSidebarOpen(newState);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newState));
+  };
+
+  const changeMode = (mode: string) => {
+    setMode(mode);
   }
 
   if (isLoading) {
@@ -52,7 +59,7 @@ export function SidebarProvider({ children }: SidebarProviderProps) {
 
   return (
     <SidebarContext.Provider
-      value={{ isSidebarOpen, toggleSidebar, isLoading }}
+      value={{ isSidebarOpen, toggleSidebar, isLoading, mode, changeMode }}
     >
       {children}
     </SidebarContext.Provider>
