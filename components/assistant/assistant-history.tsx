@@ -3,15 +3,15 @@ import * as React from 'react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-import { SidebarList } from '@/components/sidebar-list'
+import { SidebarList } from '@/components/chat/sidebar-chat-list'
 import { buttonVariants } from '@/components/ui/button'
 import { IconPlus } from '@/components/ui/icons'
 
-interface ChatHistoryProps {
+interface AssistantHistoryProps {
   userId?: string
 }
 
-export async function AssistantHistory({ userId }: ChatHistoryProps) {
+export async function AssistantHistory({ userId }: AssistantHistoryProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between p-4">
