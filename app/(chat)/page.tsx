@@ -3,7 +3,7 @@ import { Chat } from '@/components/chat/chat'
 import { AI } from '@/lib/chat/actions'
 import { auth } from '@/auth'
 import { Session } from '@/lib/types'
-import { getMissingKeys } from '../actions'
+import { getMissingKeys } from '../actions_chat'
 
 export const metadata = {
   title: '메인화면'

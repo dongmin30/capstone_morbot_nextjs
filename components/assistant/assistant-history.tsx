@@ -3,7 +3,7 @@ import * as React from 'react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-import { SidebarList } from '@/components/chat/sidebar-chat-list'
+import { SidebarAssistantList } from '@/components/assistant/sidebar-assistant-list'
 import { buttonVariants } from '@/components/ui/button'
 import { IconPlus } from '@/components/ui/icons'
 
@@ -42,7 +42,7 @@ export async function AssistantHistory({ userId }: AssistantHistoryProps) {
         }
       >
         {/* @ts-ignore */}
-        <SidebarList userId={userId} />
+        <SidebarAssistantList userId={userId} />
       </React.Suspense>
     </div>
   )
