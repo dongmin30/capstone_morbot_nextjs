@@ -35,14 +35,14 @@ export function ChatShareDialog({
   const copyShareLink = React.useCallback(
     async (chat: Chat) => {
       if (!chat.sharePath) {
-        return toast.error('Could not copy share link to clipboard')
+        return toast.error('공유 링크 복사에 실패하였습니다.')
       }
 
       const url = new URL(window.location.href)
       url.pathname = chat.sharePath
       copyToClipboard(url.toString())
       onCopy()
-      toast.success('Share link copied to clipboard')
+      toast.success('공유 링크를 복사하였습니다.')
     },
     [copyToClipboard, onCopy]
   )
