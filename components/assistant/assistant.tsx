@@ -1,38 +1,38 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { ChatList } from '@/components/chat/chat-list'
-import { ChatPanel } from '@/components/chat/chat-panel'
-import { EmptyChatScreen } from '@/components/chat/empty-chat-screen'
+import { AssistantList } from '@/components/assistant/assistant-list'
+import { AssistantPanel } from '@/components/assistant/assistant-panel'
+import { EmptyAssistantScreen } from '@/components/assistant/empty-assistant-screen'
 import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { useEffect, useState } from 'react'
 import { useUIState, useAIState } from 'ai/rsc'
 import { Session } from '@/lib/types'
 import { usePathname, useRouter } from 'next/navigation'
-import { Message } from '@/lib/chat/actions'
+import { Message } from '@/lib/assistant/actions'
 import { useScrollAnchor } from '@/lib/hooks/use-scroll-anchor'
 import { toast } from 'sonner'
 
-export interface ChatProps extends React.ComponentProps<'div'> {
+export interface AssistantProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
   session?: Session
   missingKeys: string[]
 }
 
-export function Chat({ id, className, session, missingKeys }: ChatProps) {
+export function Assistant({ id, className, session, missingKeys }: AssistantProps) {
   const router = useRouter()
   const path = usePathname()
   const [input, setInput] = useState('')
   const [messages] = useUIState()
   const [aiState] = useAIState()
 
-  const [_, setNewChatId] = useLocalStorage('newChatId', id)
+  const [_, setNewAssistantId] = useLocalStorage('newAssistantId', id)
 
   useEffect(() => {
     if (session?.user) {
-      if (!path.includes('chat') && messages.length === 1) {
-        window.history.replaceState({}, '', `/chat/${id}`)
+      if (!path.includes('assistant') && messages.length === 1) {
+        window.history.replaceState({}, '', `/assistant/${id}`)
       }
     }
   }, [id, path, session?.user, messages])
@@ -45,7 +45,7 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
   }, [aiState.messages, router])
 
   useEffect(() => {
-    setNewChatId(id)
+    setNewAssistantId(id)
   })
 
   useEffect(() => {
@@ -67,13 +67,13 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
         ref={messagesRef}
       >
         {messages.length ? (
-          <ChatList messages={messages} isShared={false} session={session} />
+          <AssistantList messages={messages} isShared={false} session={session} />
         ) : (
-          <EmptyChatScreen />
+          <EmptyAssistantScreen />
         )}
         <div className="h-px w-full" ref={visibilityRef} />
       </div>
-      <ChatPanel
+      <AssistantPanel
         id={id}
         input={input}
         setInput={setInput}

@@ -14,12 +14,12 @@ export async function getAssistants(userId?: string | null) {
 
   try {
     const pipeline = kv.pipeline()
-    const chats: string[] = await kv.zrange(`user:chat:${userId}`, 0, -1, {
+    const assistants: string[] = await kv.zrange(`user:assistant:${userId}`, 0, -1, {
       rev: true
     })
 
-    for (const chat of chats) {
-      pipeline.hgetall(chat)
+    for (const assistant of assistants) {
+      pipeline.hgetall(assistant)
     }
 
     const results = await pipeline.exec()
@@ -31,13 +31,13 @@ export async function getAssistants(userId?: string | null) {
 }
 
 export async function getAssistant(id: string, userId: string) {
-  const chat = await kv.hgetall<Assistant>(`chat:${id}`)
+  const assistant = await kv.hgetall<Assistant>(`assistant:${id}`)
 
-  if (!chat || (userId && chat.userId !== userId)) {
+  if (!assistant || (userId && assistant.userId !== userId)) {
     return null
   }
 
-  return chat
+  return assistant
 }
 
 export async function removeAssistant({ id, path }: { id: string; path: string }) {
@@ -50,7 +50,7 @@ export async function removeAssistant({ id, path }: { id: string; path: string }
   }
 
   //Convert uid to string for consistent comparison with session.user.id
-  const uid = String(await kv.hget(`chat:${id}`, 'userId'))
+  const uid = String(await kv.hget(`assistant:${id}`, 'userId'))
 
   if (uid !== session?.user?.id) {
     return {
@@ -58,21 +58,21 @@ export async function removeAssistant({ id, path }: { id: string; path: string }
     }
   }
 
-  await kv.del(`chat:${id}`)
-  await kv.zrem(`user:chat:${session.user.id}`, `chat:${id}`)
+  await kv.del(`assistant:${id}`)
+  await kv.zrem(`user:assistant:${session.user.id}`, `assistant:${id}`)
 
   revalidatePath('/')
   return revalidatePath(path)
 }
 
 export async function getSharedAssistant(id: string) {
-  const chat = await kv.hgetall<Assistant>(`chat:${id}`)
+  const assistant = await kv.hgetall<Assistant>(`assistant:${id}`)
 
-  if (!chat || !chat.sharePath) {
+  if (!assistant || !assistant.sharePath) {
     return null
   }
 
-  return chat
+  return assistant
 }
 
 export async function shareAssistant(id: string) {
@@ -84,33 +84,33 @@ export async function shareAssistant(id: string) {
     }
   }
 
-  const chat = await kv.hgetall<Assistant>(`chat:${id}`)
+  const assistant = await kv.hgetall<Assistant>(`assistant:${id}`)
 
-  if (!chat || chat.userId !== session.user.id) {
+  if (!assistant || assistant.userId !== session.user.id) {
     return {
       error: 'Something went wrong'
     }
   }
 
   const payload = {
-    ...chat,
-    sharePath: `/share/${chat.id}`
+    ...assistant,
+    sharePath: `/share/${assistant.id}`
   }
 
-  await kv.hmset(`chat:${chat.id}`, payload)
+  await kv.hmset(`assistant:${assistant.id}`, payload)
 
   return payload
 }
 
-export async function saveAssistant(chat: Assistant) {
+export async function saveAssistant(assistant: Assistant) {
   const session = await auth()
 
   if (session && session.user) {
     const pipeline = kv.pipeline()
-    pipeline.hmset(`chat:${chat.id}`, chat)
-    pipeline.zadd(`user:chat:${chat.userId}`, {
+    pipeline.hmset(`assistant:${assistant.id}`, assistant)
+    pipeline.zadd(`user:assistant:${assistant.userId}`, {
       score: Date.now(),
-      member: `chat:${chat.id}`
+      member: `assistant:${assistant.id}`
     })
     await pipeline.exec()
   } else {

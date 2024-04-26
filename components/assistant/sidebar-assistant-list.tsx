@@ -1,5 +1,4 @@
 import { getAssistants } from '@/app/actions_assistant'
-import { ClearHistory } from '@/components/chat/clear-history'
 import { SidebarItems } from '@/components/sidebar-items'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { cache } from 'react'
@@ -9,19 +8,19 @@ interface SidebarListProps {
   children?: React.ReactNode
 }
 
-const loadChats = cache(async (userId?: string) => {
+const loadAssistants = cache(async (userId?: string) => {
   return await getAssistants(userId)
 })
 
 export async function SidebarAssistantList({ userId }: SidebarListProps) {
-  const chats = await loadChats(userId)
+  const assistants = await loadAssistants(userId)
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-1 overflow-auto">
-        {chats?.length ? (
+        {assistants?.length ? (
           <div className="space-y-2 px-2">
-            <SidebarItems chats={chats} />
+            <SidebarItems chats={assistants} />
           </div>
         ) : (
           <div className="p-8 text-center">

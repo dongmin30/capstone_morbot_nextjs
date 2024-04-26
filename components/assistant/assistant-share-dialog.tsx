@@ -4,7 +4,7 @@ import * as React from 'react'
 import { type DialogProps } from '@radix-ui/react-dialog'
 import { toast } from 'sonner'
 
-import { ServerActionResult, type Chat } from '@/lib/types'
+import { ServerActionResult, type Assistant } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -17,29 +17,29 @@ import {
 import { IconSpinner } from '@/components/ui/icons'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 
-interface ChatShareDialogProps extends DialogProps {
-  chat: Pick<Chat, 'id' | 'title' | 'messages'>
-  shareChat: (id: string) => ServerActionResult<Chat>
+interface AssistantShareDialogProps extends DialogProps {
+  assistant: Pick<Assistant, 'id' | 'title' | 'messages'>
+  shareAssistant: (id: string) => ServerActionResult<Assistant>
   onCopy: () => void
 }
 
-export function ChatShareDialog({
-  chat,
-  shareChat,
+export function AssistantShareDialog({
+  assistant,
+  shareAssistant: shareAssistant,
   onCopy,
   ...props
-}: ChatShareDialogProps) {
+}: AssistantShareDialogProps) {
   const { copyToClipboard } = useCopyToClipboard({ timeout: 1000 })
   const [isSharePending, startShareTransition] = React.useTransition()
 
   const copyShareLink = React.useCallback(
-    async (chat: Chat) => {
-      if (!chat.sharePath) {
+    async (assistant: Assistant) => {
+      if (!assistant.sharePath) {
         return toast.error('Could not copy share link to clipboard')
       }
 
       const url = new URL(window.location.href)
-      url.pathname = chat.sharePath
+      url.pathname = assistant.sharePath
       copyToClipboard(url.toString())
       onCopy()
       toast.success('Share link copied to clipboard')
@@ -57,9 +57,9 @@ export function ChatShareDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="p-4 space-y-1 text-sm border rounded-md">
-          <div className="font-medium">{chat.title}</div>
+          <div className="font-medium">{assistant.title}</div>
           <div className="text-muted-foreground">
-            {chat.messages.length} 개의 메시지
+            {assistant.messages.length} 개의 메시지
           </div>
         </div>
         <DialogFooter className="items-center">
@@ -68,7 +68,7 @@ export function ChatShareDialog({
             onClick={() => {
               // @ts-ignore
               startShareTransition(async () => {
-                const result = await shareChat(chat.id)
+                const result = await shareAssistant(assistant.id)
 
                 if (result && 'error' in result) {
                   toast.error(result.error)
