@@ -51,10 +51,10 @@ export function SidebarActions({
               onClick={() => setShareDialogOpen(true)}
             >
               <IconShare />
-              <span className="sr-only">Share</span>
+              <span className="sr-only">공유</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Share chat</TooltipContent>
+          <TooltipContent>공유</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -65,10 +65,10 @@ export function SidebarActions({
               onClick={() => setDeleteDialogOpen(true)}
             >
               <IconTrash />
-              <span className="sr-only">Delete</span>
+              <span className="sr-only">삭제</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Delete chat</TooltipContent>
+          <TooltipContent>삭제</TooltipContent>
         </Tooltip>
       </div>
       <ChatShareDialog

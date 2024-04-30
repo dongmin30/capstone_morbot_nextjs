@@ -1,5 +1,5 @@
 import { getAssistants } from '@/app/actions_assistant'
-import { SidebarItems } from '@/components/sidebar-items'
+import { SidebarItems } from '@/components/chat/sidebar-chat-items'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { cache } from 'react'
 
