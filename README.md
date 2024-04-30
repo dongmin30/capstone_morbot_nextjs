@@ -1,70 +1,55 @@
 <a href="https://chat.vercel.ai/">
   <img alt="Next.js 14 and App Router-ready AI chatbot." src="https://chat.vercel.ai/opengraph-image.png">
-  <h1 align="center">Next.js AI Chatbot</h1>
+  <h1 align="center">Next.js AI 챗봇 모르봇</h1>
 </a>
 
 <p align="center">
-  An open-source AI chatbot app template built with Next.js, the Vercel AI SDK, OpenAI, and Vercel KV.
-</p>
-
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a> ·
-  <a href="#authors"><strong>Authors</strong></a>
+  Vercel AI SDK와 NextJs 및 Vercel KV로 구축한 AI 챗봇 모르봇입니다.
 </p>
 <br/>
 
-## Features
+## 특징
 
-- [Next.js](https://nextjs.org) App Router
-- React Server Components (RSCs), Suspense, and Server Actions
-- [Vercel AI SDK](https://sdk.vercel.ai/docs) for streaming chat UI
-- Support for OpenAI (default), Anthropic, Cohere, Hugging Face, or custom AI chat models and/or LangChain
+- [Next.js](https://nextjs.org) 앱 라우터
+- [Vercel AI SDK](https://sdk.vercel.ai/docs) 채팅 스트리밍 UI
 - [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - [Radix UI](https://radix-ui.com) for headless component primitives
-  - Icons from [Phosphor Icons](https://phosphoricons.com)
-- Chat History, rate limiting, and session storage with [Vercel KV](https://vercel.com/storage/kv)
-- [NextAuth.js](https://github.com/nextauthjs/next-auth) for authentication
+  - 스타일 적용 방식 [Tailwind CSS](https://tailwindcss.com)
+  - [Radix UI](https://radix-ui.com) 헤드리스 구성요소 UI
+  - 아이콘 출처 [Phosphor Icons](https://phosphoricons.com)
+- 채팅 기록, 속도 제한 및 세션 저장 [Vercel KV](https://vercel.com/storage/kv)
+- [NextAuth.js](https://github.com/nextauthjs/next-auth) NextAuth 인증
+- GPT-4-turbo의 어시스턴트 파일 검색 기능
 
-## Model Providers
+## 사용하는 모델
 
-This template ships with OpenAI `gpt-3.5-turbo` as the default. However, thanks to the [Vercel AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), [Hugging Face](https://huggingface.co), or using [LangChain](https://js.langchain.com) with just a few lines of code.
+해당 템플릿은 'gpt-3.5-turbo'를 기본 값으로 사용하며 어시스턴트 파일 검색 기능 사용을 위해 'gpt-4-turbo' 모델도 사용합니다. [Vercel AI SDK](https://sdk.vercel.ai/docs)
 
-## Deploy Your Own
+## KV 데이터베이스 인스턴스 생성
 
-You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
+아래 링크에 설명된 단계를 실행합니다. [quick start guide](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) 해당 가이드는 Vercel에서 KV 데이터베이스 인스턴스를 생성 및 구성하여 애플리케이션이 상호 작용할 수 있도록 지원합니다.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-title=Next.js+Chat&demo-description=A+full-featured%2C+hackable+Next.js+AI+chatbot+built+by+Vercel+Labs&demo-url=https%3A%2F%2Fchat.vercel.ai%2F&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4aVPvWuTmBvzM5cEdRdqeW%2F4234f9baf160f68ffb385a43c3527645%2FCleanShot_2023-06-16_at_17.09.21.png&project-name=Next.js+Chat&repository-name=nextjs-chat&repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot&from=templates&skippable-integrations=1&env=OPENAI_API_KEY%2CAUTH_SECRET&envDescription=How+to+get+these+env+vars&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot%2Fblob%2Fmain%2F.env.example&teamCreateStatus=hidden&stores=[{"type":"kv"}])
+환경 변수를 업데이트를 구동하실 때 기억해두어야합니다. (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`) KV 데이터베이스 설정 중에 제공된 자격 증명을 기록하여 `.env` 파일에 저장합니다.
 
-## Creating a KV Database Instance
+## 로컬에서 실행
 
-Follow the steps outlined in the [quick start guide](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) provided by Vercel. This guide will assist you in creating and configuring your KV database instance on Vercel, enabling your application to interact with it.
+Next.js AI Morbot을 실행하려면 [`.env.example`에 정의된](.env.example) 환경 변수를 사용해야 합니다. 이를 위해서는 [Vercel 환경 변수](https://vercel.com/docs/projects/environment-variables)를 빌드 배포 시 사용하는 방법도 있지만 로컬에서는 `.env` 파일로 구동할 수 있습니다.
 
-Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`) in the `.env` file with the appropriate credentials provided during the KV database setup.
+> 참고: `.env` 파일을 커밋하면 안 됩니다. 그렇지 않으면 다른 사람이 다양한 OpenAI 및 인증 공급자 계정에 대한 액세스를 제어할 수 있는 비밀이 노출됩니다.
 
-## Running locally
-
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
-
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
-
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+1. Vercel CLI 설치: `npm i -g vercel`
+2. Vercel 및 GitHub 계정과 로컬 인스턴스 연결 (`.vercel` 디렉토리 생성): `vercel link`
+3. 환경 변수 다운로드: `vercel env pull`
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Your app template should now be running on [localhost:3000](http://localhost:3000/).
+이제 앱 템플릿이 다음에서 실행되어야 합니다. [localhost:3000](http://localhost:3000/).
 
-## Authors
+## 템플릿 출처
 
-This library is created by [Vercel](https://vercel.com) and [Next.js](https://nextjs.org) team members, with contributions from:
+이 라이브러리는 [Vercel](https://vercel.com) 및 [Next.js](https://nextjs.org) 팀원이 만들었으며, 아래 인원이 기여하였습니다:
 
 - Jared Palmer ([@jaredpalmer](https://twitter.com/jaredpalmer)) - [Vercel](https://vercel.com)
 - Shu Ding ([@shuding\_](https://twitter.com/shuding_)) - [Vercel](https://vercel.com)
