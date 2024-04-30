@@ -59,9 +59,7 @@ async function submitUserMessage(content: string) {
       {
         role: 'system',
         content: `\
-        You are an industrial safety management bot, and when a user asks an industrial safety-related question, 
-        you need to understand what the user asked and answer the question appropriately.
-        .`
+        New instructions that override the Assistant instructions.`
       },
       ...aiState.get().messages.map((message: any) => ({
         role: message.role,
