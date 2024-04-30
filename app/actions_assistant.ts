@@ -45,7 +45,7 @@ export async function removeAssistant({ id, path }: { id: string; path: string }
 
   if (!session) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -54,7 +54,7 @@ export async function removeAssistant({ id, path }: { id: string; path: string }
 
   if (uid !== session?.user?.id) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -80,7 +80,7 @@ export async function shareAssistant(id: string) {
 
   if (!session?.user?.id) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -88,7 +88,7 @@ export async function shareAssistant(id: string) {
 
   if (!assistant || assistant.userId !== session.user.id) {
     return {
-      error: '문제가 발생하였습니다.'
+      error: 'Something went wrong'
     }
   }
 

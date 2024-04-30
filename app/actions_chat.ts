@@ -45,7 +45,7 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
 
   if (!session) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -54,7 +54,7 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
 
   if (uid !== session?.user?.id) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -70,7 +70,7 @@ export async function clearChats() {
 
   if (!session?.user?.id) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -106,7 +106,7 @@ export async function shareChat(id: string) {
 
   if (!session?.user?.id) {
     return {
-      error: '연동 실패'
+      error: 'Unauthorized'
     }
   }
 
@@ -114,7 +114,7 @@ export async function shareChat(id: string) {
 
   if (!chat || chat.userId !== session.user.id) {
     return {
-      error: '문제가 발생하였습니다.'
+      error: 'Something went wrong'
     }
   }
 

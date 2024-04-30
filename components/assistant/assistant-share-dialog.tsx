@@ -35,14 +35,14 @@ export function AssistantShareDialog({
   const copyShareLink = React.useCallback(
     async (assistant: Assistant) => {
       if (!assistant.sharePath) {
-        return toast.error('공유 링크 복사에 실패하였습니다.')
+        return toast.error('Could not copy share link to clipboard')
       }
 
       const url = new URL(window.location.href)
       url.pathname = assistant.sharePath
       copyToClipboard(url.toString())
       onCopy()
-      toast.success('공유 링크를 복사하였습니다.')
+      toast.success('Share link copied to clipboard')
     },
     [copyToClipboard, onCopy]
   )
