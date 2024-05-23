@@ -20,7 +20,7 @@ export async function SidebarAssistantList({ userId }: SidebarListProps) {
       <div className="flex-1 overflow-auto">
         {assistants?.length ? (
           <div className="space-y-2 px-2">
-            <SidebarItems chats={assistants} />
+            <SidebarItems assistants={assistants} />
           </div>
         ) : (
           <div className="p-8 text-center">

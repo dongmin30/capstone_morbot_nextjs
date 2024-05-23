@@ -29,7 +29,7 @@ export function ChatPrompt({ isLoading, onSubmit }: { isLoading: boolean; onSubm
         <Textarea
           tabIndex={0}
           onKeyDown={onKeyDown}
-          placeholder="Send a message."
+          placeholder="질문사항을 작성해주세요."
           className="min-h-[54px] w-full resize-none bg-transparent p-4 pr-[40px] focus-within:outline-none"
           autoFocus
           spellCheck={false}

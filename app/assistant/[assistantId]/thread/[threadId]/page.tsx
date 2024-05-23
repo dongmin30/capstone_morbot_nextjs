@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useReducer } from 'react'
 import { readStreamableValue } from 'ai/rsc'
-import { createMessage, listMessages, runThread } from '@/lib/assistant/actions_temp'
+import { createMessage, listMessages, runThread } from '@/lib/assistant/actions'
 import { AssistantMessage as Message } from '@/lib/types'
-import { Chat } from '@/components/assistant/chat'
+import { Chat } from '@/components/assistant/assistant'
 
 interface PageProps {
   params: { assistantId: string; threadId: string }
@@ -61,7 +61,7 @@ export default function Page({ params }: PageProps) {
     await createMessage(params.threadId, userMessage)
     const stream = await runThread(params.threadId, params.assistantId)
 
-    dispatch({ type: 'ADD_MESSAGE', message: { role: 'assistant', content: '_Generating response..._' } })
+    dispatch({ type: 'ADD_MESSAGE', message: { role: 'assistant', content: '_질문답변 사항 생성 중..._' } })
     for await (const v of readStreamableValue(stream)) {
       if (v && v.text !== '') {
         dispatch({ type: 'UPDATE_LAST_MESSAGE', content: v.text })
@@ -71,7 +71,7 @@ export default function Page({ params }: PageProps) {
   }
 
   return (
-    <div className="relative flex h-[calc(100vh-theme(spacing.16))] overflow-hidden bg-background dark:bg-transparent">
+    <div className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]">
       <Chat messages={state.messages} handleSubmit={handleSubmit} isLoading={state.isLoading} />
     </div>
   )

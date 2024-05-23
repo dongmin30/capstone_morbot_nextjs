@@ -1,203 +1,88 @@
-import 'server-only'
+'use server'
 
-import {
-  createAI,
-  getMutableAIState,
-  getAIState,
-  render,
-  createStreamableValue
-} from 'ai/rsc'
+import { createStreamableValue } from 'ai/rsc'
 import OpenAI from 'openai'
+import { AssistantMessage as Message } from '@/lib/types'
 
-import {
-  BotCard,
-  BotMessage,
-  Stock,
-  Purchase
-} from '@/components/stocks'
+const openai = new OpenAI()
 
-import { Events } from '@/components/stocks/events'
-import { Stocks } from '@/components/stocks/stocks'
-import {
-  nanoid
-} from '@/lib/utils'
-import { saveAssistant } from '@/app/actions_assistant'
-import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
-import { Assistant } from '@/lib/types'
-import { auth } from '@/auth'
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || ''
-})
-
-async function submitUserMessage(content: string) {
-  'use server'
-
-  const aiState = getMutableAIState<typeof AI>()
-
-  aiState.update({
-    ...aiState.get(),
-    messages: [
-      ...aiState.get().messages,
-      {
-        id: nanoid(),
-        role: 'user',
-        content
-      }
-    ]
+export async function createVectorStore() {
+  const vectorStore = await openai.beta.vectorStores.create({
+    name: `rag-store-${new Date().toISOString()}`,
   })
 
-  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>
-  let textNode: undefined | React.ReactNode
+  return vectorStore
+}
 
-  const ui = render({
-    model: 'gpt-4-turbo',
-    // TODO max_token 잡아두기
-    provider: openai,
-    initial: <SpinnerMessage />,
-    messages: [
-      {
-        role: 'system',
-        content: `\
-        You are an industrial safety management bot, and when a user asks an industrial safety-related question, 
-        you need to understand what the user asked and answer the question appropriately.
-        .`
+export async function createFile(formData: FormData) {
+  const fileObj = formData.get('file') as File | null
+  if (!fileObj) {
+    throw new Error('파일이 없습니다.')
+  }
+
+  const file = await openai.files.create({
+    file: fileObj,
+    purpose: 'assistants',
+  })
+
+  return file
+}
+
+export async function attachFiles(vectorStoreId: string, file_ids: string[]) {
+  const fileBatch = await openai.beta.vectorStores.fileBatches.createAndPoll(vectorStoreId, { file_ids })
+  return fileBatch
+}
+
+export async function createAssistant(vectorStoreId: string, assistantName: string) {
+  const assistant = await openai.beta.assistants.create({
+    model: 'gpt-4o',
+    name: assistantName,
+    tools: [{ type: 'file_search' }],
+    tool_resources: {
+      file_search: {
+        vector_store_ids: [vectorStoreId],
       },
-      ...aiState.get().messages.map((message: any) => ({
-        role: message.role,
-        content: message.content,
-        name: message.name
-      }))
-    ],
-    text: ({ content, done, delta }) => {
-      if (!textStream) {
-        textStream = createStreamableValue('')
-        textNode = <BotMessage content={textStream.value} />
-      }
-
-      if (done) {
-        textStream.done()
-        aiState.done({
-          ...aiState.get(),
-          messages: [
-            ...aiState.get().messages,
-            {
-              id: nanoid(),
-              role: 'assistant',
-              content
-            }
-          ]
-        })
-      } else {
-        textStream.update(delta)
-      }
-
-      return textNode
-    }
+    },
   })
 
-  return {
-    id: nanoid(),
-    display: ui
-  }
+  return assistant
 }
 
-export type Message = {
-  role: 'user' | 'assistant' | 'system' | 'function' | 'data' | 'tool'
-  content: string
-  id: string
-  name?: string
+export async function createThread() {
+  const thread = await openai.beta.threads.create()
+  return thread
 }
 
-export type AIState = {
-  assistantId: string
-  messages: Message[]
+export async function createMessage(threadId: string, message: Message) {
+  const _message = await openai.beta.threads.messages.create(threadId, message)
+
+  return _message
 }
 
-export type UIState = {
-  id: string
-  display: React.ReactNode
-}[]
+export async function listMessages(threadId: string): Promise<Message[]> {
+  const response = await openai.beta.threads.messages.list(threadId)
 
-export const AI = createAI<AIState, UIState>({
-  actions: {
-    submitUserMessage
-  },
-  initialUIState: [],
-  initialAIState: { assistantId: nanoid(), messages: [] },
-  unstable_onGetUIState: async () => {
-    'use server'
+  const messages = response.data.map(message => {
+    const { text } = message.content[0] as OpenAI.Beta.Threads.Messages.TextContentBlock
+    return {
+      content: text.value,
+      role: message.role,
+    } as Message
+  })
+  messages.reverse()
 
-    const session = await auth()
+  return messages
+}
 
-    if (session && session.user) {
-      const aiState = getAIState()
+export async function runThread(threadId: string, assistantId: string) {
+  const stream = createStreamableValue({ text: '' })
 
-      if (aiState) {
-        const uiState = getUIStateFromAIState(aiState)
-        return uiState
-      }
-    } else {
-      return
-    }
-  },
-  unstable_onSetAIState: async ({ state, done }) => {
-    'use server'
+  openai.beta.threads.runs
+    .stream(threadId, {
+      assistant_id: assistantId,
+    })
+    .on('textDelta', (_, snapshopt) => stream.update({ text: snapshopt.value }))
+    .on('textDone', (content, _) => stream.done({ text: content.value }))
 
-    const session = await auth()
-
-    if (session && session.user) {
-      const { assistantId, messages } = state
-
-      const createdAt = new Date()
-      const userId = session.user.id as string
-      const path = `/assistant/${assistantId}`
-      const title = messages[0].content.substring(0, 100)
-
-      const assistant: Assistant = {
-        id: assistantId,
-        title,
-        userId,
-        createdAt,
-        messages,
-        path
-      }
-
-      await saveAssistant(assistant)
-    } else {
-      return
-    }
-  }
-})
-
-export const getUIStateFromAIState = (aiState: Assistant) => {
-  return aiState.messages
-    .filter(message => message.role !== 'system')
-    .map((message, index) => ({
-      id: `${aiState.assistantId}-${index}`,
-      display:
-        message.role === 'function' ? (
-          message.name === 'listStocks' ? (
-            <BotCard>
-              <Stocks props={JSON.parse(message.content)} />
-            </BotCard>
-          ) : message.name === 'showStockPrice' ? (
-            <BotCard>
-              <Stock props={JSON.parse(message.content)} />
-            </BotCard>
-          ) : message.name === 'showStockPurchase' ? (
-            <BotCard>
-              <Purchase props={JSON.parse(message.content)} />
-            </BotCard>
-          ) : message.name === 'getEvents' ? (
-            <BotCard>
-              <Events props={JSON.parse(message.content)} />
-            </BotCard>
-          ) : null
-        ) : message.role === 'user' ? (
-          <UserMessage>{message.content}</UserMessage>
-        ) : (
-          <BotMessage content={message.content} />
-        )
-    }))
+  return stream.value
 }

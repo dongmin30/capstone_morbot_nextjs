@@ -1,23 +1,23 @@
 'use client'
 
-import { Chat } from '@/lib/types'
+import { Assistant } from '@/lib/types'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { removeAssistant, shareAssistant } from '@/app/actions_assistant'
 
-import { SidebarActions } from '@/components/sidebar-actions'
-import { SidebarItem } from '@/components/sidebar-item'
+import { SidebarActions } from '@/components/assistant/sidebar-assistant-actions'
+import { SidebarItem } from '@/components/assistant/sidebar-assistant-item'
 
 interface SidebarItemsProps {
-  chats?: Chat[]
+  assistants?: Assistant[]
 }
 
-export function SidebarItems({ chats }: SidebarItemsProps) {
-  if (!chats?.length) return null
+export function SidebarItems({ assistants }: SidebarItemsProps) {
+  if (!assistants?.length) return null
 
   return (
     <AnimatePresence>
-      {chats.map(
+      {assistants.map(
         (chat, index) =>
           chat && (
             <motion.div
@@ -29,7 +29,7 @@ export function SidebarItems({ chats }: SidebarItemsProps) {
             >
               <SidebarItem index={index} chat={chat}>
                 <SidebarActions
-                  chat={chat}
+                  assistant={chat}
                   removeChat={removeAssistant}
                   shareChat={shareAssistant}
                 />

@@ -18,7 +18,7 @@ import { IconSpinner } from '@/components/ui/icons'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 
 interface AssistantShareDialogProps extends DialogProps {
-  assistant: Pick<Assistant, 'id' | 'title' | 'messages'>
+  assistant: Pick<Assistant, 'title' | 'assistantId' | 'threadId'>
   shareAssistant: (id: string) => ServerActionResult<Assistant>
   onCopy: () => void
 }
@@ -58,9 +58,6 @@ export function AssistantShareDialog({
         </DialogHeader>
         <div className="p-4 space-y-1 text-sm border rounded-md">
           <div className="font-medium">{assistant.title}</div>
-          <div className="text-muted-foreground">
-            {assistant.messages.length} 개의 메시지
-          </div>
         </div>
         <DialogFooter className="items-center">
           <Button
@@ -68,7 +65,7 @@ export function AssistantShareDialog({
             onClick={() => {
               // @ts-ignore
               startShareTransition(async () => {
-                const result = await shareAssistant(assistant.id)
+                const result = await shareAssistant(assistant.assistantId)
 
                 if (result && 'error' in result) {
                   toast.error(result.error)

@@ -2,11 +2,11 @@ import { Message } from 'ai'
 
 export interface Assistant extends Record<string, any> {
   id: string
+  assistantId: string
   title: string
   createdAt: Date
   userId: string
   path: string
-  messages: Message[]
   sharePath?: string
 }
 
