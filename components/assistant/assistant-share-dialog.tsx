@@ -18,7 +18,7 @@ import { IconSpinner } from '@/components/ui/icons'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 
 interface AssistantShareDialogProps extends DialogProps {
-  assistant: Pick<Assistant, 'title' | 'assistantId' | 'threadId'>
+  assistant: Pick<Assistant, 'title' | 'assistantId' | 'id'>
   shareAssistant: (id: string) => ServerActionResult<Assistant>
   onCopy: () => void
 }
