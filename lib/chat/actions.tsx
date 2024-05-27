@@ -157,7 +157,7 @@ async function submitUserMessage(content: string) {
   let textNode: undefined | React.ReactNode
 
   const ui = render({
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-4o',
     // TODO max_token 잡아두기
     provider: openai,
     initial: <SpinnerMessage />,
