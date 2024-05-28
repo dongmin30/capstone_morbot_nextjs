@@ -80,6 +80,8 @@ export async function runThread(threadId: string, assistantId: string) {
   openai.beta.threads.runs
     .stream(threadId, {
       assistant_id: assistantId,
+      max_prompt_tokens: 5000,
+      max_completion_tokens: 3000,
     })
     .on('textDelta', (_, snapshopt) => stream.update({ text: snapshopt.value }))
     .on('textDone', (content, _) => stream.done({ text: content.value }))
