@@ -23,13 +23,13 @@ export function Chat({ dataParams, messages, handleSubmit, isLoading, className 
     if (!path.includes('assistant') && messages.length === 0) {
       window.history.replaceState({}, '', `/assistant/${dataParams.assistantId}/thread/${dataParams.threadId}`)
     }
-  }, [path, messages])
+  }, [path, messages, dataParams.assistantId, dataParams.threadId])
 
   useEffect(() => {
     if (messages.length === 0) {
       router.refresh()
     }
-  }, [router])
+  }, [messages.length, router])
 
   return (
     <div className="flex w-full flex-col">
