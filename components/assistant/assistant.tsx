@@ -5,15 +5,32 @@ import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { ChatMessage } from '@/components/chat-message'
 import { ChatPrompt } from '@/components/chat-prompt'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 interface ChatProps {
   messages: Message[]
   handleSubmit: (input: string) => void
   isLoading: boolean
+  dataParams: { assistantId: string; threadId: string }
   className?: string
 }
 
-export function Chat({ messages, handleSubmit, isLoading, className }: ChatProps) {
+export function Chat({ dataParams, messages, handleSubmit, isLoading, className }: ChatProps) {
+  const router = useRouter()
+  const path = usePathname()
+  useEffect(() => {
+    if (!path.includes('assistant') && messages.length === 0) {
+      window.history.replaceState({}, '', `/assistant/${dataParams.assistantId}/thread/${dataParams.threadId}`)
+    }
+  }, [path, messages])
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      router.refresh()
+    }
+  }, [router])
+
   return (
     <div className="flex w-full flex-col">
       <div className="w-full grow overflow-auto">
@@ -34,7 +51,7 @@ export function Chat({ messages, handleSubmit, isLoading, className }: ChatProps
         <div className="mx-auto max-w-3xl sm:px-4">
           <ChatPrompt isLoading={isLoading} onSubmit={handleSubmit} />
           <p className="hidden px-2 py-1 text-center text-xs leading-normal text-muted-foreground sm:block">
-            모르봇에게 전달한 파일의 내용에 대해 물어보세요!
+            모르봇에게 제공한 파일의 내용에 대해 물어보세요!
           </p>
         </div>
       </div>
